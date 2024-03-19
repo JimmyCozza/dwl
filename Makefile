@@ -7,6 +7,8 @@ include config.mk
 DWLCPPFLAGS = -I. -DWLR_USE_UNSTABLE -D_POSIX_C_SOURCE=200809L -DVERSION=\"$(VERSION)\" $(XWAYLAND)
 DWLDEVCFLAGS = -g -pedantic -Wall -Wextra -Wdeclaration-after-statement -Wno-unused-parameter -Wshadow -Wunused-macros\
 	-Werror=strict-prototypes -Werror=implicit -Werror=return-type -Werror=incompatible-pointer-types -Wfloat-conversion
+LUA_LIBS = -llua
+LUA_INCLUDES = -I/usr/include/lua5.3
 
 # CFLAGS / LDFLAGS
 PKGS      = wlroots wayland-server xkbcommon libinput $(XLIBS)
@@ -15,7 +17,7 @@ LDLIBS    = `$(PKG_CONFIG) --libs $(PKGS)` $(LIBS)
 
 all: dwl
 dwl: dwl.o util.o
-	$(CC) dwl.o util.o $(LDLIBS) $(LDFLAGS) $(DWLCFLAGS) -o $@
+	$(CC) dwl.o util.o $(LDLIBS) $(LDFLAGS) $(DWLCFLAGS) -o $@ $(LUA_LIBS) $(LUA_INCLUDES)
 dwl.o: dwl.c config.mk config.h client.h cursor-shape-v1-protocol.h pointer-constraints-unstable-v1-protocol.h wlr-layer-shell-unstable-v1-protocol.h xdg-shell-protocol.h
 util.o: util.c util.h
 
